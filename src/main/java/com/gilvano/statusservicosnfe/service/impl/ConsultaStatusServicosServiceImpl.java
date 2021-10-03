@@ -1,5 +1,6 @@
 package com.gilvano.statusservicosnfe.service.impl;
 
+import com.gilvano.statusservicosnfe.model.AutorizadorHistoricoStatus;
 import com.gilvano.statusservicosnfe.model.AutorizadorStatus;
 import com.gilvano.statusservicosnfe.model.StatusOffLineOnLine;
 import com.gilvano.statusservicosnfe.service.ConsultaStatusServicosService;

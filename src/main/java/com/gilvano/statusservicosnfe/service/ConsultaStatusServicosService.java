@@ -1,5 +1,6 @@
 package com.gilvano.statusservicosnfe.service;
 
+import com.gilvano.statusservicosnfe.model.AutorizadorHistoricoStatus;
 import com.gilvano.statusservicosnfe.model.AutorizadorStatus;
 
 import java.io.IOException;

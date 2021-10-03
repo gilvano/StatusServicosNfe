@@ -1,7 +1,7 @@
 package com.gilvano.statusservicosnfe.component;
 
+import com.gilvano.statusservicosnfe.model.AutorizadorHistoricoStatus;
 import com.gilvano.statusservicosnfe.model.AutorizadorStatus;
-import com.gilvano.statusservicosnfe.service.AutorizadorStatusService;
 import com.gilvano.statusservicosnfe.service.impl.AutorizadorStatusServiceImpl;
 import com.gilvano.statusservicosnfe.service.impl.ConsultaStatusServicosServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +40,4 @@ public class ConsultaStatusServicosJob {
             log.warn("Erro ao consultar o status dos serviços da nfe, erro: " + e.getStackTrace());
         }
     }
-
-
 }
