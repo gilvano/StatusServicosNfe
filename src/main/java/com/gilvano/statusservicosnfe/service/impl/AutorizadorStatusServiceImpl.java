@@ -58,11 +58,15 @@ public class AutorizadorStatusServiceImpl implements AutorizadorStatusService {
         List<Autorizador> autorizadorList = autorizadorRepository.findAll();
         List<StatusEstado> statusEstadoList = new ArrayList<>();
         for (Autorizador autorizador: autorizadorList) {
-            statusEstadoList.add(StatusEstado.builder()
-                    .estado(autorizador.getNome())
-                    .status(autorizador.getStatusAtual())
-                    .build());
+            List<String> estadosAutorizador = autorizadorEstadoService.buscarEstadoDoAutorizador(autorizador.getNome());
+            estadosAutorizador.forEach(estado ->
+                statusEstadoList.add(StatusEstado.builder()
+                        .estado(estado)
+                        .status(autorizador.getStatusAtual())
+                        .build())
+            );
         }
+        statusEstadoList.sort(Comparator.comparing(StatusEstado::getEstado));
         return statusEstadoList;
     }
 }
