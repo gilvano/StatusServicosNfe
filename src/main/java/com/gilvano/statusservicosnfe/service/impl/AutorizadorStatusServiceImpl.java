@@ -6,13 +6,16 @@ import com.gilvano.statusservicosnfe.model.AutorizadorStatus;
 import com.gilvano.statusservicosnfe.repository.AutorizadorRepository;
 import com.gilvano.statusservicosnfe.repository.AutorizadorStatusRepository;
 import com.gilvano.statusservicosnfe.resource.response.StatusEstado;
+import com.gilvano.statusservicosnfe.service.AutorizadorEstadoService;
 import com.gilvano.statusservicosnfe.service.AutorizadorStatusService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +26,7 @@ public class AutorizadorStatusServiceImpl implements AutorizadorStatusService {
 
     private final AutorizadorStatusRepository autorizadorStatusRepository;
     private final AutorizadorRepository autorizadorRepository;
+    private final AutorizadorEstadoService autorizadorEstadoService;
 
     @Override
     public void salvar(AutorizadorStatus autorizadorStatus) {
@@ -68,5 +72,21 @@ public class AutorizadorStatusServiceImpl implements AutorizadorStatusService {
         }
         statusEstadoList.sort(Comparator.comparing(StatusEstado::getEstado));
         return statusEstadoList;
+    }
+
+    @Override
+    public StatusEstado buscarStatusAtualDoEstado(String estado) {
+        String autorizador = autorizadorEstadoService.buscarAutorizadorDoEstado(estado.toUpperCase());
+        Optional<Autorizador> autorizadorEstatus = autorizadorRepository.findByNome(autorizador);
+        if(autorizadorEstatus.isPresent()) {
+            return StatusEstado.builder()
+                    .estado(estado.toUpperCase())
+                    .status(autorizadorEstatus.get().getStatusAtual())
+                    .build();
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NO_CONTENT, "Autorizador não encontrado para o estado: " + estado
+            );
+        }
     }
 }

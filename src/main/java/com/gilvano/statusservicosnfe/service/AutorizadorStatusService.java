@@ -9,4 +9,6 @@ import java.util.List;
 public interface AutorizadorStatusService {
     void salvar(AutorizadorStatus autorizadorStatus);
     List<StatusEstado> buscarStatusAtualPorEstado();
+
+    StatusEstado buscarStatusAtualDoEstado(String estado);
 }
