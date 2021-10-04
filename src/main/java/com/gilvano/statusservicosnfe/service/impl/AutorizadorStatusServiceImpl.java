@@ -35,35 +35,6 @@ public class AutorizadorStatusServiceImpl implements AutorizadorStatusService {
     private final AutorizadorEstadoService autorizadorEstadoService;
 
     @Override
-    public void salvar(AutorizadorStatus autorizadorStatus) {
-        Optional<Autorizador> autorizador = autorizadorRepository.findByNome(autorizadorStatus.getAutorizador());
-        if (autorizador.isPresent()) {
-            salvarHistoricoAutorizador(autorizadorStatus, autorizador.get());
-            autorizador.get().setStatusAtual(autorizadorStatus.getStatus());
-            autorizadorRepository.save(autorizador.get());
-        } else {
-            Autorizador novoAutorizador = salvarNovoAutorizador(autorizadorStatus);
-            salvarHistoricoAutorizador(autorizadorStatus, novoAutorizador);
-        }
-    }
-
-    private Autorizador salvarNovoAutorizador(AutorizadorStatus autorizadorStatus) {
-        return autorizadorRepository.save(Autorizador.builder()
-                .nome(autorizadorStatus.getAutorizador())
-                .statusAtual(autorizadorStatus.getStatus())
-                .build());
-    }
-
-    private void salvarHistoricoAutorizador(AutorizadorStatus autorizadorStatus, Autorizador  autorizador) {
-        autorizadorHistoricoStatusRepository.save(AutorizadorHistoricoStatus.builder()
-                .autorizador(autorizador)
-                .status(autorizadorStatus.getStatus())
-                .dataStatus(autorizadorStatus.getDataStatus())
-                .status(autorizadorStatus.getStatus())
-                .build());
-    }
-
-    @Override
     public List<StatusEstado> buscarStatusAtualPorEstado() {
         List<Autorizador> autorizadorList = autorizadorRepository.findAll();
         List<StatusEstado> statusEstadoList = new ArrayList<>();

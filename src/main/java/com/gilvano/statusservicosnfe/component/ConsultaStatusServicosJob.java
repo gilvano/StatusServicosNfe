@@ -1,8 +1,8 @@
 package com.gilvano.statusservicosnfe.component;
 
 import com.gilvano.statusservicosnfe.DTO.AutorizadorStatus;
-import com.gilvano.statusservicosnfe.service.impl.AutorizadorStatusServiceImpl;
-import com.gilvano.statusservicosnfe.service.impl.ConsultaStatusServicosServiceImpl;
+import com.gilvano.statusservicosnfe.service.AutorizadorHistoricoStatusService;
+import com.gilvano.statusservicosnfe.service.ConsultaStatusServicosService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,8 +18,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ConsultaStatusServicosJob {
 
-    private final ConsultaStatusServicosServiceImpl consultaStatusServicosService;
-    private final AutorizadorStatusServiceImpl autorizadorStatusService;
+    private final ConsultaStatusServicosService consultaStatusServicosService;
+    private final AutorizadorHistoricoStatusService autorizadorHistoricoStatusService;
 
     @Scheduled(fixedRate = 300000)
     public void consultarStatusServicos() {
@@ -30,11 +30,11 @@ public class ConsultaStatusServicosJob {
 
             status.orElse(Collections.emptyList())
                     .forEach(autorizador -> {
-                        autorizadorStatusService.salvar(autorizador);
+                        autorizadorHistoricoStatusService.salvar(autorizador);
                         log.info("Salvando Status do Autorizador: {}", autorizador.getAutorizador());
                     });
         } catch (IOException e) {
-            log.warn("Erro ao consultar o status dos serviços da nfe, erro: " + e.getStackTrace());
+            log.warn("Erro ao consultar o status dos serviços da nfe, erro: " + e);
         }
     }
 }
