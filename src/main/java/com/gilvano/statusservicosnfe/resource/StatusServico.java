@@ -1,6 +1,7 @@
 package com.gilvano.statusservicosnfe.resource;
 
 import com.gilvano.statusservicosnfe.resource.response.StatusEstado;
+import com.gilvano.statusservicosnfe.resource.response.StatusEstadoPorData;
 import com.gilvano.statusservicosnfe.service.impl.AutorizadorStatusServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,11 @@ public class StatusServico {
     @GetMapping(value = "statusatualestado/{estado}" ,produces = {"application/json"})
     public ResponseEntity<StatusEstado> buscarStatusAtualPorEstado(@PathVariable String estado){
         return ResponseEntity.ok(service.buscarStatusAtualDoEstado(estado));
+    }
+
+    @GetMapping(value = "statuspordata/{data}" ,produces = {"application/json"})
+    public ResponseEntity<List<StatusEstadoPorData>> buscarStatusPorData(@PathVariable String data){
+        return ResponseEntity.ok(service.buscarStatusPorData(data));
     }
 
 

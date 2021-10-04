@@ -3,9 +3,11 @@ package com.gilvano.statusservicosnfe.service.impl;
 import com.gilvano.statusservicosnfe.model.Autorizador;
 import com.gilvano.statusservicosnfe.model.AutorizadorHistoricoStatus;
 import com.gilvano.statusservicosnfe.model.AutorizadorStatus;
+import com.gilvano.statusservicosnfe.model.StatusAutorizadorPorData;
+import com.gilvano.statusservicosnfe.repository.AutorizadorHistoricoStatusRepository;
 import com.gilvano.statusservicosnfe.repository.AutorizadorRepository;
-import com.gilvano.statusservicosnfe.repository.AutorizadorStatusRepository;
 import com.gilvano.statusservicosnfe.resource.response.StatusEstado;
+import com.gilvano.statusservicosnfe.resource.response.StatusEstadoPorData;
 import com.gilvano.statusservicosnfe.service.AutorizadorEstadoService;
 import com.gilvano.statusservicosnfe.service.AutorizadorStatusService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -24,7 +29,7 @@ import java.util.Optional;
 @Log4j2
 public class AutorizadorStatusServiceImpl implements AutorizadorStatusService {
 
-    private final AutorizadorStatusRepository autorizadorStatusRepository;
+    private final AutorizadorHistoricoStatusRepository autorizadorHistoricoStatusRepository;
     private final AutorizadorRepository autorizadorRepository;
     private final AutorizadorEstadoService autorizadorEstadoService;
 
@@ -49,7 +54,7 @@ public class AutorizadorStatusServiceImpl implements AutorizadorStatusService {
     }
 
     private void salvarHistoricoAutorizador(AutorizadorStatus autorizadorStatus, Autorizador  autorizador) {
-        autorizadorStatusRepository.save(AutorizadorHistoricoStatus.builder()
+        autorizadorHistoricoStatusRepository.save(AutorizadorHistoricoStatus.builder()
                 .autorizador(autorizador)
                 .status(autorizadorStatus.getStatus())
                 .dataStatus(autorizadorStatus.getDataStatus())
@@ -88,5 +93,38 @@ public class AutorizadorStatusServiceImpl implements AutorizadorStatusService {
                     HttpStatus.NO_CONTENT, "Autorizador não encontrado para o estado: " + estado
             );
         }
+    }
+
+    @Override
+    public List<StatusEstadoPorData> buscarStatusPorData(String data) {
+        LocalDate dataFiltro = converterParametroData(data);
+        LocalDateTime dataInicial = dataFiltro.atTime(0, 0, 1);
+        LocalDateTime dataFinal = dataFiltro.atTime(23, 59, 59);
+        List<StatusAutorizadorPorData> statusAutorizadorList = autorizadorHistoricoStatusRepository.findByDataStatus(dataInicial, dataFinal);
+        List<StatusEstadoPorData> statusEstadoPorDataList = new ArrayList<>();
+
+        statusAutorizadorList.forEach(autorizador -> {
+            List<String> estadosAutorizador = autorizadorEstadoService.buscarEstadoDoAutorizador(autorizador.getNome());
+            estadosAutorizador.forEach(estado ->
+                    statusEstadoPorDataList.add(StatusEstadoPorData.builder()
+                            .estado(estado)
+                            .status(autorizador.getStatus())
+                            .data(autorizador.getDataStatus())
+                            .build())
+            );
+        });
+
+        statusEstadoPorDataList.sort(Comparator.comparing(StatusEstadoPorData::getEstado));
+        return statusEstadoPorDataList;
+    }
+
+    private LocalDate converterParametroData(String data) {
+        LocalDate dataFiltro;
+        try {
+            dataFiltro = LocalDate.parse(data, DateTimeFormatter.ofPattern("yyyyMMdd"));
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Data informada em formato inválido. Formato esperado yyyyMMdd");
+        }
+        return dataFiltro;
     }
 }
