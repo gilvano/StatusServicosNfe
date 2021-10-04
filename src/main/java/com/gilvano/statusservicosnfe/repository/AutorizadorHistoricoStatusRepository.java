@@ -1,6 +1,6 @@
 package com.gilvano.statusservicosnfe.repository;
 
-import com.gilvano.statusservicosnfe.DTO.AutorizadorMaiorIndisponibilidade;
+import com.gilvano.statusservicosnfe.resource.response.AutorizadorMaiorIndisponibilidade;
 import com.gilvano.statusservicosnfe.model.AutorizadorHistoricoStatus;
 import com.gilvano.statusservicosnfe.DTO.StatusAutorizadorPorData;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +15,11 @@ public interface AutorizadorHistoricoStatusRepository extends JpaRepository<Auto
             "join AutorizadorHistoricoStatus h on h.autorizador.id = a.id " +
             "where h.dataStatus between :dataInicial and :dataFinal")
     List<StatusAutorizadorPorData> findByDataStatus(@Param("dataInicial") LocalDateTime dataInicial, @Param("dataFinal") LocalDateTime dataFinal);
+
+    @Query("select new com.gilvano.statusservicosnfe.resource.response.AutorizadorMaiorIndisponibilidade(a.nome, count(h.id)) from Autorizador a " +
+            "join AutorizadorHistoricoStatus h on h.autorizador.id = a.id " +
+            "where h.status = 'OFF_LINE' " +
+            "group by a.nome")
+    List<AutorizadorMaiorIndisponibilidade> findAutorizadorComMaiorIndisponibilidade();
+
 }

@@ -1,6 +1,7 @@
 package com.gilvano.statusservicosnfe.service;
 
 import com.gilvano.statusservicosnfe.DTO.AutorizadorStatus;
+import com.gilvano.statusservicosnfe.resource.response.AutorizadorMaiorIndisponibilidade;
 import com.gilvano.statusservicosnfe.resource.response.StatusEstado;
 import com.gilvano.statusservicosnfe.resource.response.StatusEstadoPorData;
 
@@ -13,4 +14,6 @@ public interface AutorizadorStatusService {
     StatusEstado buscarStatusAtualDoEstado(String estado);
 
     List<StatusEstadoPorData> buscarStatusPorData(String data);
+
+    AutorizadorMaiorIndisponibilidade buscarAutorizadorComMaiorIndisponibilidade();
 }

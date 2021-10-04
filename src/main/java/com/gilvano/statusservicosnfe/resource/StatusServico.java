@@ -1,5 +1,6 @@
 package com.gilvano.statusservicosnfe.resource;
 
+import com.gilvano.statusservicosnfe.resource.response.AutorizadorMaiorIndisponibilidade;
 import com.gilvano.statusservicosnfe.resource.response.StatusEstado;
 import com.gilvano.statusservicosnfe.resource.response.StatusEstadoPorData;
 import com.gilvano.statusservicosnfe.service.impl.AutorizadorStatusServiceImpl;
@@ -19,20 +20,23 @@ public class StatusServico {
 
     private final AutorizadorStatusServiceImpl service;
 
-    @GetMapping(value = "statusatual" ,produces = {"application/json"})
+    @GetMapping(value = "statusatual", produces = {"application/json"})
     public ResponseEntity<List<StatusEstado>> buscarStatusAtualPorEstado(){
         return ResponseEntity.ok(service.buscarStatusAtualPorEstado());
     }
 
-    @GetMapping(value = "statusatualestado/{estado}" ,produces = {"application/json"})
+    @GetMapping(value = "statusatualestado/{estado}", produces = {"application/json"})
     public ResponseEntity<StatusEstado> buscarStatusAtualPorEstado(@PathVariable String estado){
         return ResponseEntity.ok(service.buscarStatusAtualDoEstado(estado));
     }
 
-    @GetMapping(value = "statuspordata/{data}" ,produces = {"application/json"})
+    @GetMapping(value = "statuspordata/{data}", produces = {"application/json"})
     public ResponseEntity<List<StatusEstadoPorData>> buscarStatusPorData(@PathVariable String data){
         return ResponseEntity.ok(service.buscarStatusPorData(data));
     }
 
-
+    @GetMapping(value = "autoriazadormaiorindisponibilidade", produces = {"application/json"})
+    public ResponseEntity<AutorizadorMaiorIndisponibilidade> buscarAutorizadorComMaiorIndisponibilidade(){
+        return ResponseEntity.ok(service.buscarAutorizadorComMaiorIndisponibilidade());
+    }
 }
