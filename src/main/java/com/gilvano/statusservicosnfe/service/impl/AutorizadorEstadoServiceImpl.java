@@ -14,11 +14,7 @@ import java.util.stream.Collectors;
 public class AutorizadorEstadoServiceImpl implements AutorizadorEstadoService {
 
     private List<String> estadosAutorizadorSVAN;
-
-    @Value("#{'${estados.autorizador.svrs}'.split(',')}")
     private List<String> estadosAutorizadorSVRS;
-
-    @Value("#{'${estados.autorizador.proprio}'.split(',')}")
     private List<String> estadosAutorizadorProprio;
 
     private Map<String, String> autorizadorEstado;
