@@ -1,6 +1,6 @@
 package com.gilvano.statusservicosnfe.component;
 
-import com.gilvano.statusservicosnfe.model.AutorizadorStatus;
+import com.gilvano.statusservicosnfe.DTO.AutorizadorStatus;
 import com.gilvano.statusservicosnfe.service.impl.AutorizadorStatusServiceImpl;
 import com.gilvano.statusservicosnfe.service.impl.ConsultaStatusServicosServiceImpl;
 import lombok.RequiredArgsConstructor;

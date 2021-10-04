@@ -2,8 +2,8 @@ package com.gilvano.statusservicosnfe.service.impl;
 
 import com.gilvano.statusservicosnfe.model.Autorizador;
 import com.gilvano.statusservicosnfe.model.AutorizadorHistoricoStatus;
-import com.gilvano.statusservicosnfe.model.AutorizadorStatus;
-import com.gilvano.statusservicosnfe.model.StatusAutorizadorPorData;
+import com.gilvano.statusservicosnfe.DTO.AutorizadorStatus;
+import com.gilvano.statusservicosnfe.DTO.StatusAutorizadorPorData;
 import com.gilvano.statusservicosnfe.repository.AutorizadorHistoricoStatusRepository;
 import com.gilvano.statusservicosnfe.repository.AutorizadorRepository;
 import com.gilvano.statusservicosnfe.resource.response.StatusEstado;

@@ -1,4 +1,4 @@
-package com.gilvano.statusservicosnfe.model;
+package com.gilvano.statusservicosnfe.DTO;
 
 import com.sun.istack.NotNull;
 import lombok.*;
