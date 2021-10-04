@@ -1,6 +1,5 @@
 package com.gilvano.statusservicosnfe.component;
 
-import com.gilvano.statusservicosnfe.model.AutorizadorHistoricoStatus;
 import com.gilvano.statusservicosnfe.model.AutorizadorStatus;
 import com.gilvano.statusservicosnfe.service.impl.AutorizadorStatusServiceImpl;
 import com.gilvano.statusservicosnfe.service.impl.ConsultaStatusServicosServiceImpl;
@@ -10,6 +9,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,16 +26,13 @@ public class ConsultaStatusServicosJob {
         log.info("Executando consulta de status dos serviços da nfe");
 
         try {
-            Optional<List<AutorizadorStatus>> servicos = consultaStatusServicosService.consultarStatusServicos();
-            if (servicos.isPresent()){
-                for (AutorizadorStatus autorizador: servicos.get()){
-                    autorizadorStatusService.salvar(autorizador);
-                    log.info("Salvando Autorizador: {} Status: {} DataStatus: {}",
-                            autorizador.getAutorizador(),
-                            autorizador.getStatus(),
-                            autorizador.getDataStatus());
-                }
-            }
+            Optional<List<AutorizadorStatus>> status = consultaStatusServicosService.consultarStatusServicos();
+
+            status.orElse(Collections.emptyList())
+                    .forEach(autorizador -> {
+                        autorizadorStatusService.salvar(autorizador);
+                        log.info("Salvando Status do Autorizador: {}", autorizador.getAutorizador());
+                    });
         } catch (IOException e) {
             log.warn("Erro ao consultar o status dos serviços da nfe, erro: " + e.getStackTrace());
         }
